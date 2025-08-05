@@ -185,6 +185,9 @@ export const paths = {
     course: {
       root: `${ROOTS.DASHBOARD}/course`,
       list: `${ROOTS.DASHBOARD}/manage-course`
+    },
+    exams: {
+      root: `${ROOTS.DASHBOARD}/exam`
     }
   },
 };

@@ -88,7 +88,8 @@ const ClassesPage = lazy(() => import('src/pages/dashboard/lop-hoc/lophoc'));
 const SubjectPage = lazy(() => import('src/pages/mon-hoc/monhoc'));
 // Manage course page
 const CoursePage = lazy(() => import('src/pages/dashboard/course/manage'));
-
+// Exam page
+const ExamPage = lazy(() => import('src/pages/dashboard/exam'));
 // ----------------------------------------------------------------------
 
 function SuspenseOutlet() {
@@ -127,6 +128,7 @@ export const dashboardRoutes: RouteObject[] = [
       { path: 'subjects', element: <SubjectPage /> },
       { path: 'course', element: <OverviewCoursePage /> },
       { path: 'manage-course', element: <CoursePage /> },
+      { path: 'exam', element: <ExamPage /> },
       {
         path: 'user',
         children: [

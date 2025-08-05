@@ -96,6 +96,11 @@ export const navData: NavSectionProps['data'] = [
         path: paths.dashboard.course.list,
         icon: <Iconify icon={'fluent-color:slide-text-sparkle-24'} />,
       },
+      {
+        title: 'Bài thi',
+        path: paths.dashboard.exams.root,
+        icon: <Iconify icon={'fluent-color:document-folder-24'} />,
+      },
     ],
   },
   /**
