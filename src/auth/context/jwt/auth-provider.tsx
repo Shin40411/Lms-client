@@ -8,7 +8,6 @@ import { AuthContext } from '../auth-context';
 import { setSession, isValidToken } from './utils';
 
 import type { AuthState } from '../../types';
-
 // ----------------------------------------------------------------------
 
 /**
@@ -36,6 +35,9 @@ export function AuthProvider({ children }: Props) {
         const user = res.data;
 
         setState({ user: { ...user, accessToken }, loading: false });
+
+        // useSocketConversation();
+
       } else {
         setState({ user: null, loading: false });
       }

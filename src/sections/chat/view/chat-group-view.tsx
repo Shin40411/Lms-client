@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { CONFIG } from 'src/global-config';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { useGetConversation, useGetConversations } from 'src/actions/chat';
+import { useGetConversation, useGetConversations, useSocketConversation } from 'src/actions/chat';
 
 import { EmptyContent } from 'src/components/empty-content';
 
@@ -24,6 +24,7 @@ import { getStudyGroupById, getStudyGroups } from 'src/api/group';
 import { UserItem } from 'src/types/user';
 import useSWR from 'swr';
 import { endpoints } from 'src/lib/axios';
+import { IChatMessage } from 'src/types/chat';
 
 
 export function ChatGroupView() {
@@ -34,10 +35,27 @@ export function ChatGroupView() {
 
     const { conversations, conversationsLoading } = useGetConversations();
     const { conversation, conversationError, conversationLoading } = useGetConversation(selectedConversationId);
+    const [messages, setMessages] = useState<IChatMessage[]>(conversation?.messages ?? []);
 
     const roomNav = useCollapseNav();
 
     const conversationsNav = useCollapseNav();
+
+    useEffect(() => {
+        if (conversation?.messages) {
+            setMessages(conversation.messages);
+        }
+    }, [conversation?.id]);
+
+    const handleSocketMessage = useCallback((msg: IChatMessage) => {
+        setMessages((prev) => {
+            const exists = prev.some((m) => m.id === msg.id);
+            if (exists) return prev;
+            return [...prev, msg];
+        });
+    }, []);
+
+    useSocketConversation(handleSocketMessage);
 
     const [recipients, setRecipients] = useState<UserItem[]>([]);
 
@@ -67,10 +85,6 @@ export function ChatGroupView() {
             });
         }
     }, [selectedGroupId, groupData]);
-
-    // useSocketChat((msg) => {
-    //     console.log('Message received from socket:', msg);
-    // });
 
     // fetch list of groups
     const { data: listGroupData } = useSWR(
@@ -141,14 +155,12 @@ export function ChatGroupView() {
                                             />
                                             :
                                             <ChatMessageList
-                                                messages={conversation?.messages ?? []}
+                                                messages={messages}
                                                 participants={filteredParticipants}
                                                 loading={conversationLoading}
                                             />
                                         }
                                         <ChatMessageInput
-                                            recipients={recipients}
-                                            onAddRecipients={handleAddRecipients}
                                             selectedConversationId={selectedConversationId}
                                             disabled={!recipients.length && !selectedConversationId}
                                         />

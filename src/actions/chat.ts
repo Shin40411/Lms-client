@@ -1,14 +1,14 @@
 import type { SWRConfiguration } from 'swr';
 import type { IChatMessage, IChatParticipant, IChatConversation, IChatBodySender } from 'src/types/chat';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { keyBy } from 'es-toolkit';
 import useSWR, { mutate } from 'swr';
 
 import axios, { fetcher, endpoints } from 'src/lib/axios';
 import axiosInstance from 'src/lib/axios';
-import { socketChat } from 'src/lib/socket';
-import { SOCKET_INCOMING_EVENTS } from 'src/constants/socket-events';
+import { socketChat, socketConversation } from 'src/lib/socket';
+import { SOCKET_INCOMING_EVENTS, SOCKET_NAMESPACES, TEST } from 'src/constants/socket-events';
 
 // ----------------------------------------------------------------------
 
@@ -218,15 +218,17 @@ export async function clickConversation(conversationId: string) {
   );
 }
 
-export function useSocketChat(onMessageReceived: (msg: any) => void) {
+export function useSocketConversation(onMessageReceived: (msg: IChatMessage) => void) {
   useEffect(() => {
-    socketChat.connect();
-
-    socketChat.on(SOCKET_INCOMING_EVENTS.MESSAGE_RECEIVED, onMessageReceived);
+    socketConversation.connect();
+    // socketChat.on('CONNECTED', (c)=> {
+    //   console.log(c);
+    // });
+    socketConversation.on(SOCKET_INCOMING_EVENTS.MESSAGE_RECEIVED, onMessageReceived);
 
     return () => {
-      socketChat.off(SOCKET_INCOMING_EVENTS.MESSAGE_RECEIVED, onMessageReceived);
-      socketChat.disconnect();
+      socketConversation.off(SOCKET_INCOMING_EVENTS.MESSAGE_RECEIVED, onMessageReceived);
+      socketConversation.disconnect();
     };
   }, [onMessageReceived]);
 }

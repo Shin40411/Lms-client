@@ -1,3 +1,5 @@
+export const TEST = 'CONNECTED';
+
 export const SOCKET_OUTGOING_EVENTS = {
   SEND_MESSAGE: 'sendMessage',
   EDIT_MESSAGE: 'editMessage',

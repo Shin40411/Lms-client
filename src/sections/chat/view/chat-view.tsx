@@ -118,8 +118,6 @@ export function ChatView() {
               )}
 
               <ChatMessageInput
-                recipients={[]}
-                onAddRecipients={() => { }}
                 selectedConversationId={selectedConversationId}
                 disabled={!recipients.length && !selectedConversationId}
               />

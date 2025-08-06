@@ -23,15 +23,11 @@ import { SOCKET_OUTGOING_EVENTS } from 'src/constants/socket-events';
 
 type Props = {
   disabled: boolean;
-  recipients: UserItem[];
   selectedConversationId: string;
-  onAddRecipients: (recipients: UserItem[]) => void;
 };
 
 export function ChatMessageInput({
   disabled,
-  recipients,
-  onAddRecipients,
   selectedConversationId,
 }: Props) {
   const router = useRouter();
@@ -99,7 +95,7 @@ export function ChatMessageInput({
       };
 
       await sendMessage(preparedData);
-      socketChat.emit(SOCKET_OUTGOING_EVENTS.SEND_MESSAGE, message);
+      // socketChat.emit(SOCKET_OUTGOING_EVENTS.SEND_MESSAGE, message);
     } catch (error: any) {
       console.error(error);
       toast.error(error.message);
